@@ -25,7 +25,7 @@ function TasksList() {
 
       <div className="grid grid-cols-3 gap-3">
         {tasks.map((task) => (
-          <div className="bg-neutral-800 p-4 rounded-md" key={task.id}>
+            <div className="bg-neutral-800 p-4 rounded-md" key={task.id}>
             <header className="flex justify-between">
               <h3 className="text-lg font-bold">{task.title}</h3>
               <div className="flex gap-x-2">
@@ -39,12 +39,19 @@ function TasksList() {
                   onClick={() => handleDelete(task.id)}
                   className="bg-red-500 px-2 py-1 text-xs rounded-md"
                 >
-                  delete
+                  Delete
                 </button>
               </div>
             </header>
             <p>{task.description}</p>
+            {task.dueDate && (
+              <p className="bg-indigo-600 px-2 py-1 rounded-sm text-sm shadow-sm">
+                Due Date: {new Date(task.dueDate).toLocaleDateString()}
+              </p>
+            )}
             <p className="text-xs text-slate-400">{task.id}</p>
+        
+           
           </div>
         ))}
       </div>

@@ -1,17 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice} from "@reduxjs/toolkit";
 
 const initialState = [
   {
     id: "1",
     title: "Task 1",
     completed: false,
-    description: "This is a task",
+    description: "Pendiente por fecha",
+    dueDate: null,
   },
   {
     id: "2",
     title: "Task 2",
     completed: false,
-    description: "This is a task",
+    description: "Pendiente por fecha",
+    dueDate: null,
   },
 ];
 
@@ -20,14 +22,17 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     addTask: (state, action) => {
-      state.push(action.payload);
+      console.log("Adding task:", action.payload);
+      state.push(action.payload); 
     },
     editTask: (state, action) => {
-      const { id, title, description } = action.payload;
+      console.log("Editing task:", action.payload);
+      const { id, title, description, dueDate } = action.payload;
       const foundTask = state.find((task) => task.id === id);
       if (foundTask) {
         foundTask.title = title;
         foundTask.description = description;
+        foundTask.dueDate = dueDate;
       }
     },
     deleteTask: (state, action) => {

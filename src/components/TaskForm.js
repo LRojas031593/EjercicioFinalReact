@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { addTask, editTask } from "../features/tasks/tasksSlice";
 import { v4 as uuid } from "uuid";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-function TaskForm() {
-  const [task, setTask] = useState({
-    title: "",
-    description: "",
-  });
+function TaskForm({ taskId, history }) {
+  const [task, setTask] = useState({ title: "", description: "", dueDate: null });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams(); 
   const tasks = useSelector((state) => state.tasks);
 
   const handleChange = (e) => {
@@ -37,12 +36,18 @@ function TaskForm() {
 
     navigate("/");
   };
-
+  
   useEffect(() => {
     if (params.id) {
-      setTask(tasks.find((task) => task.id === params.id));
+      const currentTask = tasks.find((task) => task.id === params.id);
+      setTask(currentTask || {});
+    } else {
+      setTask((prevTask) => ({
+        ...prevTask,
+        dueDate: null,
+      }));
     }
-  }, [params, tasks]);
+  }, [params.id, tasks]);
 
   return (
     <form onSubmit={handleSubmit} className="bg-zinc-800 max-w-sm p-4">
@@ -67,7 +72,19 @@ function TaskForm() {
           placeholder="Write a description"
         />
       </label>
-      <button type="submit" className="bg-indigo-600 px-2 py-1">Submit</button>
+      
+      <label>Due Date:  </label>
+        <br></br>
+        <DatePicker
+          selected={task.dueDate}
+          onChange={(date) => setTask({ ...task, dueDate: date })}
+          dateFormat="yyyy-MM-dd"
+          className="w-full p-2 rounded-md bg-zinc-600 mb-2"
+        />
+      <br></br>
+      <button type="submit" className="bg-indigo-600 px-2 py-1">
+        Submit
+      </button>
     </form>
   );
 }
